@@ -10,6 +10,7 @@ async function main() {
   const craft = await hre.viem.deployContract("CraftSystem", [owner, world.address]);
   const item = await hre.viem.deployContract("Item", [owner, world.address, craft.address, ""]);
   const vault = await hre.viem.deployContract("ERC4626Vault", [token.address]);
+  const oracle = await hre.viem.deployContract("DataConsumerV3");
   // const erc6551Account  = await hre.viem.deployContract("ERC6551Account");
   // const erc6551Registry = await hre.viem.deployContract("ERC6551Registry");
 
@@ -35,6 +36,9 @@ async function main() {
   );
   console.log(
     `vault address: ${vault.address}`
+  )
+  console.log(
+    `oracle address: ${oracle.address}`
   )
   console.log(
     `world address: ${world.address}`

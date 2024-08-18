@@ -8,7 +8,6 @@ import {Token} from "./Token.sol";
 import {Item} from "./Item.sol";
 import {Raffle} from "./Raffle.sol";
 import {CraftSystem} from "./CraftSystem.sol";
-import {Banking} from "./Banking.sol";
 import {ERC6551Registry} from "./ERC6551Registry.sol";
 import {IERC4626} from "@openzeppelin/contracts/interfaces/IERC4626.sol";
 
@@ -26,13 +25,16 @@ contract World is Raffle, Ownable, ReentrancyGuard {
     }
 
     struct Player {
-        uint256 tokenId;
-        uint256 score;
+        uint32 tokenId;
+        uint16 score;
+        uint8 streak;
+        uint16 ticket;
+        uint8 stamina;
+        uint8 hp;
         uint256 lastCheckIn;
-        uint256 streak;
         uint256 lastRaffle;
         uint256 lastDoCraft;
-        uint256 ticket;
+        uint256 lastResetPlayer;
     }
     struct Quest {
         string name;
@@ -55,6 +57,7 @@ contract World is Raffle, Ownable, ReentrancyGuard {
     address public registry; // Registry
     address public account; // Token Bound Account
     address public vault; // Vault
+    address public oracle; // Oracle
     // address public banking; // Banking
     uint256 public chainId;
     // External Contract
@@ -69,9 +72,11 @@ contract World is Raffle, Ownable, ReentrancyGuard {
     uint256 public marketfees = 20; // 20%
 
     uint256 public constant CHECK_IN_WINDOW = 24 hours;
-    uint256 public constant DENOMINATOR = 10 ** 16; // FRAX 10 ** 18 // 1 = 0.01 
-    // address public constant FRAX = 0xFc00000000000000000000000000000000000001;
-    // address public constant sFRAXVault = 0xBFc4D34Db83553725eC6c768da71D2D9c1456B55;
+    uint256 public constant DENOMINATOR = 10 ** 18;
+
+    uint8 public constant NORMAL_DROP = 30; // 30% Chance
+    uint8 public constant RARE_DROP = 10; // 10% Chance
+    uint8 public constant EPIC_DROP = 5; // 5% Chance 
     // Game data
 
     // Events
@@ -136,15 +141,56 @@ contract World is Raffle, Ownable, ReentrancyGuard {
 
     // Player functions
     // TODO: call createPlayer after register token bound account
-    function createPlayer(uint256 _tokenId) external onlyUser onlyTokenOwner(_tokenId) {
-        players[_msgSender()] = Player(_tokenId, 0, 0, 0, 0, 0, 0);
+    function createPlayer(uint32 _tokenId) external onlyUser onlyTokenOwner(_tokenId) {
+        players[_msgSender()] = Player(_tokenId, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         emit PlayerCreated(_tokenId, _msgSender(), block.timestamp);
     }
 
     function getPlayer(address _player) external view returns (Player memory) {
         return players[_player];
     }
+
+    function _resetPlayer() internal {
+        players[_msgSender()].stamina = 100;
+        players[_msgSender()].hp = 10;
+        players[_msgSender()].lastResetPlayer = block.timestamp;
+    }
     // Player functions
+
+      // Spawn functions
+    function spawn(uint32 _tokenId) external onlyUser onlyTokenOwner(_tokenId) {
+        require(block.timestamp >=players[_msgSender()].lastResetPlayer  + CHECK_IN_WINDOW, "Too early for next reset player");
+        _resetPlayer();
+    }
+    // Spawn functions
+
+    // Mine functions
+    function _isBlockValid(uint256 x, uint256 y, uint256 z) internal view returns (bool) {
+        // TODO: add more logic to validate the block
+        return true;
+    }
+
+    function _calculateDrop(uint256 x, uint256 y, uint256 z) internal view returns (uint256) {
+        uint256 randomSeed = (uint256(keccak256(abi.encodePacked(block.timestamp, block.prevrandao, x, y, z))) % 100);
+        uint256 drop = 0;
+        if(randomSeed < EPIC_DROP) {
+            drop = 100;
+        } else if(randomSeed < RARE_DROP) {
+            drop = 50;
+        } else if(randomSeed < NORMAL_DROP) {
+            drop = 10;
+        }
+        return drop;
+    }
+
+    function mine(uint32 _tokenId, uint256 x, uint256 y, uint256 z) external onlyUser onlyTokenOwner(_tokenId) {
+        require(_isBlockValid(x, y, z), "Invalid block");
+        require(players[_msgSender()].stamina > 0, "Not enough stamina");
+        players[_msgSender()].stamina -= 1;
+        uint256 drop = _calculateDrop(x, y, z);
+        _distributeRewardandScore(_tokenId, drop);
+    }
+    // Mine functions
 
     // Market functions
     function setMarketFees(uint256 fees) external onlyOwner {
@@ -156,29 +202,21 @@ contract World is Raffle, Ownable, ReentrancyGuard {
 
     // Exchange functions
     function exchangeItem(uint256 _tokenId, uint256 _itemId, ExchangeType exchangeType) external onlyUser onlyTokenOwner(_tokenId) nonReentrant {
-        address tokenBoundAccount = _getTokenBoundAccount(_tokenId);
+        // address tokenBoundAccount = _getTokenBoundAccount(_tokenId);
         uint256 price = _getItemPrice(_itemId);
 
         if(exchangeType == ExchangeType.BUY) {
-            require(Token(token).balanceOf(_msgSender()) >= price, "FRAX Token is not enough to buy item");
+            require(Token(token).balanceOf(_msgSender()) >= price, "Token is not enough to buy item");
             Token(token).approve(address(this), price);
             Token(token).transferFrom(_msgSender(), address(this), price);
-            Item(item).mint(tokenBoundAccount, _itemId, 1);
+            Item(item).mint(_msgSender(), _itemId, 1);
         } else {
-            require(Item(item).balanceOf(tokenBoundAccount, _itemId) > 0, "Item Token is not enough to sell item");
+            require(Item(item).balanceOf(_msgSender(), _itemId) > 0, "Item Token is not enough to sell item");
             Item(item).burn(_msgSender(), _itemId, 1);
             Token(token).transfer(_msgSender(), (price * (100 - marketfees)) / 100);
         }
-        // TODO: change CUBE token to FRAX and reduce pricing
-        // TODO: Normal PICKAXE = 0.01 FRAX(BUY) for sell reduce 20% from PRICE
-        // TODO: no need to burn but send to world contract
-        // TODO: move code to Market contract and add config sell price percentage
-        // TODO: exchange between FRAX and Item, FRAX will send to World Contract when
-        // TODO: player buy items for example PICKAXE = 0.01 USD(FRAX) it will mint PICKAXE to buyer
-        // TODO: playser sell items for example PIXAXE = 0.008 USD(FRAX) it will burn PICKAXE and return FRAX
     }
 
-    // 1 = 0.01 FRAX
     function _getItemPrice(uint256 _itemId) internal view returns (uint256) {
         require(gameItems[_itemId].price > 0, "Item not found");
         return  gameItems[_itemId].price * DENOMINATOR;
@@ -234,15 +272,9 @@ contract World is Raffle, Ownable, ReentrancyGuard {
         }
     }
 
-    // TODO: swap feature in game integrate with FRAX Swap router
-    function doSwap(uint256 _tokenId) external onlyUser onlyTokenOwner(_tokenId) {
-
-    }
-    // FRAX Integration
-
     function _distributeRewardandScore(uint256 _tokenId, uint256 _reward) internal {
         // address tokenBoundAccount = _getTokenBoundAccount(_tokenId);
-        Token(token).mint(_msgSender(), _reward * DENOMINATOR * 100);
+        Token(token).mint(_msgSender(), _reward * DENOMINATOR);
     }
 
     function _dailyCheckIn(uint256 _tokenId, uint256 _reward) internal {
@@ -280,8 +312,8 @@ contract World is Raffle, Ownable, ReentrancyGuard {
     }
 
     function _doCraft(uint256 _tokenId, uint256 _reward, uint256 _recipeId) internal {
-        address tokenBoundAccount = _getTokenBoundAccount(_tokenId);
-        (bool success, ) = CraftSystem(craft).craftItem(_recipeId, tokenBoundAccount);
+        // address tokenBoundAccount = _getTokenBoundAccount(_tokenId);
+        (bool success, ) = CraftSystem(craft).craftItem(_recipeId, _msgSender());
         if(success) {
             _distributeRewardandScore(_tokenId, _reward);
         }
@@ -342,6 +374,10 @@ contract World is Raffle, Ownable, ReentrancyGuard {
 
     function setVault(address _vault) public onlyOwner {
         vault = _vault;
+    }
+
+    function setOracle(address _oracle) public onlyOwner {
+        oracle = _oracle;
     }
     // function setBanking(address _banking) public onlyOwner {
     //     banking = _banking;

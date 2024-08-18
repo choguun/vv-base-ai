@@ -2,16 +2,16 @@ const { ethers } = require('hardhat');
 
 async function main() {
   const Contract = await ethers.getContractFactory("World");
-  const deployedContract = await Contract.attach('0x41d6e8a70e97d4d20b619ef6f7b1ae825165cc1d');
+  const deployedContract = await Contract.attach('0x29051b7f044ab62426bca8a2910fe1103ec3995f');
 
   // const account = "0x284185d5189e9bc1afa3d83eebb4a6e89befb6f4";
   // const registry = "0x017d81c2204930ec873ac351017cfde33c1de807";
-  const item = "0x4d3bbfc5f484593a008391de0fc8faed924c6476";
-  const token = "0x0d41238ca884228086aff395ee0c89f1f05fbc97";
-  const profile = "0xae47fc49e6641d5b64f9658f54dfaba005374dd1";
-  const craft = "0xcd583ae7da1bae60032f09278ebcca228752c166";
-  const vault = "0x794666ec57a9b4f59191a6bd59cf4e02a4dacc75";
-  const chainId = 3441006;
+  const item = "0x531e9363f1cd7c0c14a83c27b83a6e2a871afe13";
+  const token = "0xde2ba44f76a2b75f455ed0165546200f41558c4e";
+  const profile = "0x3d71d5221ffcae602df079d81445c93d979c51e7";
+  const craft = "0x0af04cd58f61822834e23489fd041cf9d57da8d8";
+  const vault = "0xbbe7956b4462b1dd3dddddcde2feb8d6646bf085";
+  const oracle = "0x0a2dbe91448eeb6d0f72bfce0c288f40f4d36900";
 
   const tx = await deployedContract.setProfile(profile);
   const receipt = await tx.wait();
@@ -50,6 +50,11 @@ async function main() {
   const receipt7 = await tx7.wait();
 
   console.log('Transaction receipt7: ', receipt7);
+
+  const tx8 = await deployedContract.setOracle(oracle);
+  const receipt8 = await tx8.wait();
+
+  console.log('Transaction receipt8: ', receipt8);
 
   console.log('======================== DONE ========================');
 }
