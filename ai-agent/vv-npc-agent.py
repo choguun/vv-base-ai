@@ -35,16 +35,12 @@ def get_transaction_receipt(transaction_hash: str) -> Optional[Dict]:
         print(f"an error occurred: {e}")
         return None
 
-# call read smart contract of Chainlink
-# chainlink ai retrieval    
-def fetch_chainlink_ai_retireval() -> Optional[Dict]:
-    """"""
 
 # Generative AI: NFTs using Chainlink Functions
 # Verifiable AI: Can use Functions to verify the output of an AI LLM, & get an attestation that the output is correct & what the LLM actually outputted
 npc_name = "Brian"
 creator_text = "You are a Merchant NPC. You can exchange items, craft items, and do daily check-ins."
-user_name = "c4_eth"
+user_name = "player"
 ask = "<player's request>"  # Replace this with the actual request or dynamically generate it
 
 prompt = f"""
@@ -59,10 +55,10 @@ Start with an opening message for {user_name} that remarks on their ask and expl
 
 my_agent = HiveAgent(
     name="vv-npc-agent",
-    functions=[],
+    functions=[get_transaction_receipt],
     instruction=prompt,
     config_path=get_config_path("hive_config.toml"),
     retrieve=True,
-    required_exts=[".md"],
+    required_exts=[],
 )
 my_agent.run()
