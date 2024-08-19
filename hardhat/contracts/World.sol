@@ -73,15 +73,10 @@ contract World is Raffle, Ownable, ReentrancyGuard {
     mapping(uint256 => Quest) public quests;
     mapping(uint256 => GameItem) public gameItems;
 
-    struct RequestStatus {
-        bool fulfilled;
-        bool exists;
+     struct RequestStatus {
+        bool fulfilled; // whether the request has been successfully fulfilled
+        bool exists; // whether a requestId exists
         uint256[] randomWords;
-        uint32 tokenId;
-        uint256 x;
-        uint256 y;
-        uint256 z;
-        address player;
     }
 
     mapping(uint256 => RequestStatus) public s_requests;
@@ -220,12 +215,7 @@ contract World is Raffle, Ownable, ReentrancyGuard {
         s_requests[requestId] = RequestStatus({
             fulfilled: false,
             exists: true,
-            randomWords: new uint256[](0),
-            tokenId: _tokenId,
-            x: x,
-            y: y,
-            z: z,
-            player: _msgSender()
+            randomWords: new uint256[](0)
         });
         requestIds.push(requestId);
         lastRequestId = requestId;
