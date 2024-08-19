@@ -305,8 +305,8 @@ contract World is Raffle, Ownable, ReentrancyGuard {
         require(balance > 0, "$sCUBE Balance <= 0");
         require(_amount > 0, "Amount must be greater than 0");
         require(_amount <= balance, "Amount must not be greater than balance");
-        require(Token(token).transferFrom(_msgSender(), address(this), _amount), "Transfer failed");
-        require(Token(token).approve(vault, _amount), "Approve failed");
+        require(Token(vault).transferFrom(_msgSender(), address(this), _amount), "Transfer failed");
+        require(Token(vault).approve(vault, _amount), "Approve failed");
         uint256 share = IERC4626(vault).redeem(_amount, _msgSender(), _msgSender());
         
         if(share > 0) {
