@@ -6,6 +6,7 @@ import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol
 import {Profile} from "./Profile.sol";
 import {Token} from "./Token.sol";
 import {Item} from "./Item.sol";
+import {Potion} from "./Potion.sol";
 import {Raffle} from "./Raffle.sol";
 import {CraftSystem} from "./CraftSystem.sol";
 import {ERC6551Registry} from "./ERC6551Registry.sol";
@@ -53,11 +54,13 @@ contract World is Raffle, Ownable, ReentrancyGuard {
     address public profile; // Profile
     address public token; // Token
     address public item; // Item
+    address public potion; // Potion
     address public craft; // Craft System
     address public registry; // Registry
     address public account; // Token Bound Account
     address public vault; // Vault
-    address public oracle; // Oracle
+    address public dataOracle; // dataOracle
+    address public randomOracle; // randomOracle
     // address public banking; // Banking
     uint256 public chainId;
     // External Contract
@@ -183,6 +186,7 @@ contract World is Raffle, Ownable, ReentrancyGuard {
         return drop;
     }
 
+    // Mine functions
     function mine(uint32 _tokenId, uint256 x, uint256 y, uint256 z) external onlyUser onlyTokenOwner(_tokenId) {
         require(_isBlockValid(x, y, z), "Invalid block");
         require(players[_msgSender()].stamina > 0, "Not enough stamina");
@@ -191,6 +195,19 @@ contract World is Raffle, Ownable, ReentrancyGuard {
         _distributeRewardandScore(_tokenId, drop);
     }
     // Mine functions
+
+    // consumePotion functions
+    function consumePotion(uint32 _tokenId, uint256 _potionId) external onlyUser onlyTokenOwner(_tokenId) {
+        // address tokenBoundAccount = _getTokenBoundAccount(_tokenId);
+        require(Potion(potion).balanceOf(_msgSender(), _potionId) > 0, "Potion Token is not enough to consume potion");
+        Potion(potion).burn(_msgSender(), _potionId, 1);
+        if(_potionId == 0) {
+            players[_msgSender()].stamina += 10;
+        } else {
+            players[_msgSender()].hp += 1;
+        }
+    }
+    // consumePotion functions
 
     // Market functions
     function setMarketFees(uint256 fees) external onlyOwner {
@@ -368,6 +385,10 @@ contract World is Raffle, Ownable, ReentrancyGuard {
         item = _item;
     }
 
+     function setPotion(address _potion) public onlyOwner {
+        potion = _potion;
+    }
+
     function setCraft(address _craft) public onlyOwner {
         craft = _craft;
     }
@@ -376,8 +397,12 @@ contract World is Raffle, Ownable, ReentrancyGuard {
         vault = _vault;
     }
 
-    function setOracle(address _oracle) public onlyOwner {
-        oracle = _oracle;
+    function setDataOracle(address _oracle) public onlyOwner {
+        dataOracle = _oracle;
+    }
+
+    function setRandomOracle(address _oracle) public onlyOwner {
+        randomOracle = _oracle;
     }
     // function setBanking(address _banking) public onlyOwner {
     //     banking = _banking;
