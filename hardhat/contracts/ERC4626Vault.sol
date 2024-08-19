@@ -13,7 +13,7 @@ contract ERC4626Vault is ERC20, IERC4626 {
 
     constructor(
         IERC20 asset
-        ) ERC20("Raffle Vault", "Raffle")
+        ) ERC20("Stake Cube", "sCube")
     {
         _asset = asset;
     }
