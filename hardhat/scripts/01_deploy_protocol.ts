@@ -8,6 +8,7 @@ async function main() {
   const randomOracle = await hre.viem.deployContract("SubscriptionConsumer", [111050927125045824511614274940509035041704935106337038931065260344527599144970, world.address]);
   const profile = await hre.viem.deployContract("Profile", [owner]);
   const token = await hre.viem.deployContract("Token", [owner, world.address, profile.address]);
+  const potion = await hre.viem.deployContract("Potion", [owner, world.address, token.address]);
   const craft = await hre.viem.deployContract("CraftSystem", [owner, world.address]);
   const item = await hre.viem.deployContract("Item", [owner, world.address, craft.address, ""]);
   const vault = await hre.viem.deployContract("ERC4626Vault", [token.address]);
@@ -31,6 +32,9 @@ async function main() {
     `token address: ${token.address}`
   );
   console.log(
+    `token address: ${potion.address}`
+  );
+  console.log(
     `profile address: ${profile.address}`
   );
   console.log(
@@ -43,7 +47,7 @@ async function main() {
     `dataoracle address: ${dataOracle.address}`
   )
   console.log(
-    `dataoracle address: ${randomOracle.address}`
+    `randomoracle address: ${randomOracle.address}`
   )
   console.log(
     `world address: ${world.address}`

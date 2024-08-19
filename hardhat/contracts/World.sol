@@ -3,6 +3,7 @@ pragma solidity 0.8.24;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import {IERC4626} from "@openzeppelin/contracts/interfaces/IERC4626.sol";
 import {Profile} from "./Profile.sol";
 import {Token} from "./Token.sol";
 import {Item} from "./Item.sol";
@@ -10,7 +11,8 @@ import {Potion} from "./Potion.sol";
 import {Raffle} from "./Raffle.sol";
 import {CraftSystem} from "./CraftSystem.sol";
 import {ERC6551Registry} from "./ERC6551Registry.sol";
-import {IERC4626} from "@openzeppelin/contracts/interfaces/IERC4626.sol";
+import {DataConsumerV3} from "./DataConsumerV3.sol";
+import {SubscriptionConsumer} from "./SubscriptionConsumer.sol";
 
 contract World is Raffle, Ownable, ReentrancyGuard {
     // Data Structures
@@ -59,16 +61,32 @@ contract World is Raffle, Ownable, ReentrancyGuard {
     address public registry; // Registry
     address public account; // Token Bound Account
     address public vault; // Vault
-    address public dataOracle; // dataOracle
-    address public randomOracle; // randomOracle
     // address public banking; // Banking
     uint256 public chainId;
     // External Contract
+
+    DataConsumerV3 public dataConsumerV3;
+    SubscriptionConsumer public subscriptionConsumer;
 
     // Game data
     mapping(address => Player) public players;
     mapping(uint256 => Quest) public quests;
     mapping(uint256 => GameItem) public gameItems;
+
+    struct RequestStatus {
+        bool fulfilled;
+        bool exists;
+        uint256[] randomWords;
+        uint32 tokenId;
+        uint256 x;
+        uint256 y;
+        uint256 z;
+        address player;
+    }
+
+    mapping(uint256 => RequestStatus) public s_requests;
+    uint256[] public requestIds;
+    uint256 public lastRequestId;
 
     uint256 public questCount = 0;
     uint256 public itemCount = 0;
@@ -126,6 +144,8 @@ contract World is Raffle, Ownable, ReentrancyGuard {
         uint256 fees,
         uint256 timestamp
     );
+    event RequestSent(uint256 requestId, uint32 numWords);
+    event RequestFulfilled(uint256 requestId, uint256[] randomWords);
     // Events
 
     // Modifiers
@@ -174,7 +194,10 @@ contract World is Raffle, Ownable, ReentrancyGuard {
     }
 
     function _calculateDrop(uint256 x, uint256 y, uint256 z) internal view returns (uint256) {
-        uint256 randomSeed = (uint256(keccak256(abi.encodePacked(block.timestamp, block.prevrandao, x, y, z))) % 100);
+        require(_isBlockValid(x, y, z), "Invalid block");
+        require(s_requests[lastRequestId].fulfilled, "Random words not fulfilled yet");
+        uint256 randomWord = s_requests[lastRequestId].randomWords[0];
+        uint256 randomSeed = (randomWord % 100);
         uint256 drop = 0;
         if(randomSeed < EPIC_DROP) {
             drop = 100;
@@ -191,6 +214,23 @@ contract World is Raffle, Ownable, ReentrancyGuard {
         require(_isBlockValid(x, y, z), "Invalid block");
         require(players[_msgSender()].stamina > 0, "Not enough stamina");
         players[_msgSender()].stamina -= 1;
+
+        // Request random words from Chainlink VRF
+        uint256 requestId = subscriptionConsumer.requestRandomWords(false);
+        s_requests[requestId] = RequestStatus({
+            fulfilled: false,
+            exists: true,
+            randomWords: new uint256[](0),
+            tokenId: _tokenId,
+            x: x,
+            y: y,
+            z: z,
+            player: _msgSender()
+        });
+        requestIds.push(requestId);
+        lastRequestId = requestId;
+        emit RequestSent(requestId, 2); // Assuming numWords is 2
+
         uint256 drop = _calculateDrop(x, y, z);
         _distributeRewardandScore(_tokenId, drop);
     }
@@ -398,11 +438,11 @@ contract World is Raffle, Ownable, ReentrancyGuard {
     }
 
     function setDataOracle(address _oracle) public onlyOwner {
-        dataOracle = _oracle;
+        dataConsumerV3 = DataConsumerV3(_oracle);
     }
 
     function setRandomOracle(address _oracle) public onlyOwner {
-        randomOracle = _oracle;
+        subscriptionConsumer = SubscriptionConsumer(_oracle);
     }
     // function setBanking(address _banking) public onlyOwner {
     //     banking = _banking;
