@@ -80,7 +80,7 @@ curl --location 'localhost:8000/api/v1/chat' \
 5. AI NPC
 
 ### How it works:
-![How it works](/howitwork.png "How it works")
+![How it works](/vv_howitwork.png "How it works")
 
 Demo:
 https://base.voxelverses.xyz
