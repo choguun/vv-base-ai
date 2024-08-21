@@ -43,7 +43,7 @@ $ pip install -r requirements.txt
 ## Usage
 - Run it
 ```
-(venv) $ python main.py
+(venv) $ python vv-npc-agent.py
 ```
 - Test your agent by calling it Chat API endpoint, `/api/chat`, to see the result:
 
@@ -55,7 +55,7 @@ curl --location 'localhost:8000/api/v1/chat' \
     "session_id": "session123",
     "chat_data": {
         "messages": [
-            { "role": "user", "content": "Explain the concept of immutability in the context of Uniswap’s smart contracts. Why is this feature significant?" }
+            { "role": "user", "content": "what is the base selling item on game?" }
         ]
     }
 }'

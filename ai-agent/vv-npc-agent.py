@@ -59,6 +59,7 @@ my_agent = HiveAgent(
     instruction=prompt,
     config_path=get_config_path("hive_config.toml"),
     retrieve=True,
-    required_exts=[],
+    required_exts = ['.md'],
+    retrieval_tool='chroma'
 )
 my_agent.run()
