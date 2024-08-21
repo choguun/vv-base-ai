@@ -173,7 +173,7 @@ contract World is Raffle, Ownable, ReentrancyGuard {
     }
     // Player functions
 
-      // Spawn functions
+    // Spawn functions
     function spawn(uint32 _tokenId) external onlyUser onlyTokenOwner(_tokenId) {
         require(block.timestamp >=players[_msgSender()].lastResetPlayer  + CHECK_IN_WINDOW, "Too early for next reset player");
         _resetPlayer();
@@ -407,7 +407,7 @@ contract World is Raffle, Ownable, ReentrancyGuard {
         item = _item;
     }
 
-     function setPotion(address _potion) public onlyOwner {
+    function setPotion(address _potion) public onlyOwner {
         potion = _potion;
     }
 
