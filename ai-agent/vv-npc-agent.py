@@ -4,16 +4,20 @@ import logging
 from typing import Optional, Dict
 from web3 import Web3
 from dotenv import load_dotenv
+import json
 
 load_dotenv()
 
 rpc_url = os.getenv("RPC_URL") # add an ETH Mainnet HTTP RPC URL to your `.env` file
+world_contract_address = os.getenv("WORLD_CONTRACT_ADDRESS") # add the Voxelverses contract address to your `.env` file
 
 logging.basicConfig(level=logging.INFO)
 
+with open('lend_borrow_agent/aave_lending_pool_abi.json', 'r') as abi_file:
+    world_contract_abi = json.load(abi_file)
+
 def get_config_path(filename):
     return os.path.abspath(os.path.join(os.path.dirname(__file__), filename))
-
 
 def get_transaction_receipt(transaction_hash: str) -> Optional[Dict]:
     """
@@ -35,6 +39,33 @@ def get_transaction_receipt(transaction_hash: str) -> Optional[Dict]:
         print(f"an error occurred: {e}")
         return None
 
+def query_world_data(world_id: int) -> Optional[Dict]:
+    """
+    Query world data from the Voxelverses contract.
+
+    This is example of fetch on-chain world data for recipes
+
+    Returns:
+    Optional[Dict]: The world data if successful, None otherwise.
+    """
+    web3 = Web3(Web3.HTTPProvider(rpc_url))
+
+    if not web3.is_connected():
+        print("unable to connect to Ethereum")
+        return None
+
+    try:
+        world_contract = web3.eth.contract(address=world_contract_address, abi=world_contract_abi)
+        
+        # Query the world data from the contract
+        all_recipes = world_contract.functions.getAllRecipes().call()
+
+        logging.info(f"Recipes: {all_recipes}")
+        return world_data
+    
+    except Exception as e:
+        logging.error(f"An error occurred while querying world data: {e}")
+        return None
 
 # Generative AI: NFTs using Chainlink Functions
 # Verifiable AI: Can use Functions to verify the output of an AI LLM, & get an attestation that the output is correct & what the LLM actually outputted
@@ -55,7 +86,7 @@ Start with an opening message for {user_name} that remarks on their ask and expl
 
 my_agent = HiveAgent(
     name="vv-npc-agent",
-    functions=[get_transaction_receipt],
+    functions=[get_transaction_receipt, query_world_data],
     instruction=prompt,
     config_path=get_config_path("hive_config.toml"),
     retrieve=True,
