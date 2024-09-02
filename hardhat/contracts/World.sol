@@ -4,13 +4,13 @@ pragma solidity 0.8.24;
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import {IERC4626} from "@openzeppelin/contracts/interfaces/IERC4626.sol";
+
 import {Profile} from "./Profile.sol";
 import {Token} from "./Token.sol";
 import {Item} from "./Item.sol";
 import {Potion} from "./Potion.sol";
 import {Raffle} from "./Raffle.sol";
 import {CraftSystem} from "./CraftSystem.sol";
-import {ERC6551Registry} from "./ERC6551Registry.sol";
 import {DataConsumerV3} from "./DataConsumerV3.sol";
 import {SubscriptionConsumer} from "./SubscriptionConsumer.sol";
 
@@ -73,7 +73,7 @@ contract World is Raffle, Ownable, ReentrancyGuard {
     mapping(uint256 => Quest) public quests;
     mapping(uint256 => GameItem) public gameItems;
 
-     struct RequestStatus {
+    struct RequestStatus {
         bool fulfilled; // whether the request has been successfully fulfilled
         bool exists; // whether a requestId exists
         uint256[] randomWords;
@@ -386,12 +386,6 @@ contract World is Raffle, Ownable, ReentrancyGuard {
         return questArray;
     }
     // Quest functions
-
-    // Helper functions
-    function _getTokenBoundAccount(uint256 _tokenId) internal view returns (address) {
-        return ERC6551Registry(registry).account(account, chainId, profile, _tokenId, 1);
-    }
-    // Helper functions
 
     // Admin functions
     // config world

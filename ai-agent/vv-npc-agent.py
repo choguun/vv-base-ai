@@ -61,7 +61,7 @@ def query_world_data(world_id: int) -> Optional[Dict]:
         all_recipes = world_contract.functions.getAllRecipes().call()
 
         logging.info(f"Recipes: {all_recipes}")
-        return world_data
+        return all_recipes
     
     except Exception as e:
         logging.error(f"An error occurred while querying world data: {e}")
