@@ -2,14 +2,29 @@
 
 ### How to deploy vv-base-ai
 
-#### Deploy Contract
+#### Deploy KiiChain
 * cd hardhat
-* npx hardhat run scripts/01_deploy_protocol.ts --network base
+* npx hardhat run kii-script/01_deploy.ts --network kiiTestnet
 * config contract address to all deploy scripts.
-* npx hardhat run scripts/02_setup_world.ts --network base
-* npx hardhat run scripts/03_add_quest.ts --network base
-* npx hardhat run scripts/04_add_recipe.ts --network base
-* npx hardhat run scripts/05_add_gameitem.ts --network base
+* npx hardhat run kii-script/02_setup.ts --network kiiTestnet
+* npx hardhat run kii-script/03_quest.ts --network kiiTestnet
+* npx hardhat run kii-script/04_recipe.ts --network kiiTestnet
+
+Demo:
+https://kii.voxelverses.xyz
+
+
+#### Deploy Base
+* cd hardhat
+* npx hardhat run scripts/01_deploy_protocol.ts --network baseSepolia
+* config contract address to all deploy scripts.
+* npx hardhat run scripts/02_setup_world.ts --network basebaseSepolia 
+* npx hardhat run scripts/03_add_quest.ts --network basebaseSepolia
+* npx hardhat run scripts/04_add_recipe.ts --network basebaseSepolia
+* npx hardhat run scripts/05_add_gameitem.ts --network basebaseSepolia
+
+Demo:
+https://base.voxelverses.xyz
 
 #### How to run AI Agent
 * cd ai-agent
@@ -81,7 +96,3 @@ curl --location 'localhost:8000/api/v1/chat' \
 
 ### How it works:
 ![How it works](/vv_howitwork.png "How it works")
-
-Demo:
-https://base.voxelverses.xyz
-
