@@ -16,8 +16,20 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
     },
-    base: {
+    baseSepolia: {
       url: `https://sepolia.base.org`,
+      accounts: [process.env.PRIVATE_KEY as string]
+    },
+    immutableZkevmTestnet: {
+      url: "https://rpc.testnet.immutable.com",
+      accounts: [process.env.PRIVATE_KEY as string]
+    },
+    b2Mainnet: {
+      url: "https://rpc.bsquared.network",
+      accounts: [process.env.PRIVATE_KEY as string]
+    },
+    kiiTestnet: {
+      url: "https://a.sentry.testnet.kiivalidator.com:8645",
       accounts: [process.env.PRIVATE_KEY as string]
     }
   },

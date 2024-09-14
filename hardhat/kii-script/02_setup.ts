@@ -1,15 +1,20 @@
-const { ethers } = require('hardhat');
+async function mainkii2() { 
+  const world = "0x465D5fc7bd74f73B8Ea0e5bD716522983eDCD44A";
+  const WorldContract = await ethers.getContractFactory("World");
+  const deployedContract = await WorldContract.attach(world);
+  
+  const item = "0xAF98CEB505c16dD4d7d0404104d02A5A17f7a774";
+  const potion = "0xE84e47891B28f8a29ab2f1aAAF047A361852620F";
+  const token = "0x47A9D4613b93B3aF955C918E1379A61B7b5392B9";
+  const profile = "0x58615910B3206569ab58a17F20F250ed6c054339";
+  const craft = "0xA3D093821e81eddaF43a6091EC308831dE9bf056";
+  const vault = "0xC987c9A034227C40D35E6BebaF0f9391531D2BAC";
 
-async function main2() {
-  const Contract = await ethers.getContractFactory("World");
-  const deployedContract = await Contract.attach('0x6a4cc675515e2d0f6c4473245b3ddc02cec7940a');
+  const TokenContract = await ethers.getContractFactory("Token");
+  const tokenContract = await TokenContract.attach(token);
 
-  const item = "0x284185d5189e9bc1afa3d83eebb4a6e89befb6f4";
-  const potion = "0x3fe5a36f199b3f76c6e1b7dfcb5a0786a195cffe";
-  const token = "0xbe32e79e1160264299bb97f19ef229d7fb47523e";
-  const profile = "0x5766d27e635f2141618d33c498461f9d22d0d66a";
-  const craft = "0xa25f9c4988ba67e4813401aeac467968c0baa511";
-  const vault = "0x017d81c2204930ec873ac351017cfde33c1de807";
+  const tx0 = await tokenContract.setWorld(world);
+  const receipt0 = await tx0.wait();
 
   const tx = await deployedContract.setProfile(profile);
   const receipt = await tx.wait();
@@ -52,7 +57,7 @@ async function main2() {
   console.log('======================== DONE ========================');
 }
 
-main2()
+mainkii2()
   .then(() => process.exit(0))
   .catch((error) => {
     console.error(error);
