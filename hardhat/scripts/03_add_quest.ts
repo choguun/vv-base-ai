@@ -1,7 +1,7 @@
 
 async function main3() {
   const Contract = await ethers.getContractFactory("World");
-  const deployedContract = await Contract.attach('0x6a4cc675515e2d0f6c4473245b3ddc02cec7940a');
+  const deployedContract = await Contract.attach('0x8c512f0077efB9fd7aafb6E914F48a71868cFf41');
 
   // createQuest(string memory _name, string memory _description, uint256 _reward, QuestType _questType)
   // 1. daily check in 

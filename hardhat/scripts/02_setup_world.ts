@@ -2,14 +2,14 @@ const { ethers } = require('hardhat');
 
 async function main2() {
   const Contract = await ethers.getContractFactory("World");
-  const deployedContract = await Contract.attach('0x6a4cc675515e2d0f6c4473245b3ddc02cec7940a');
+  const deployedContract = await Contract.attach('0x8c512f0077efB9fd7aafb6E914F48a71868cFf41');
 
-  const item = "0x284185d5189e9bc1afa3d83eebb4a6e89befb6f4";
-  const potion = "0x3fe5a36f199b3f76c6e1b7dfcb5a0786a195cffe";
-  const token = "0xbe32e79e1160264299bb97f19ef229d7fb47523e";
-  const profile = "0x5766d27e635f2141618d33c498461f9d22d0d66a";
-  const craft = "0xa25f9c4988ba67e4813401aeac467968c0baa511";
-  const vault = "0x017d81c2204930ec873ac351017cfde33c1de807";
+  const item = "0x0673F20FAB85Fd5d7a392436086c51038a483712";
+  const potion = "0x11850B9E51F1A8E1c86D23bAc649FF9E82ECb4Fa";
+  const token = "0xeF823Db9A153Ac9EbdF0100Fd7957c59E1Ab2E49";
+  const profile = "0x8D145bA09c387E60D373aA1D432576E6a790aa81";
+  const craft = "0xa3D6F8f0455250d3679C5A9d418Fb190c8FBA6e5";
+  const vault = "0x026e6C5d10fB2655f39a5B367C2Ff80af9215AC5";
 
   const tx = await deployedContract.setProfile(profile);
   const receipt = await tx.wait();
