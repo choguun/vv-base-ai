@@ -31,6 +31,10 @@ const config: HardhatUserConfig = {
     kiiTestnet: {
       url: "https://a.sentry.testnet.kiivalidator.com:8645",
       accounts: [process.env.PRIVATE_KEY as string]
+    },
+    crossfiTestnet: {
+      url: "https://testnet-crossfi-evm.konsortech.xyz",
+      accounts: [process.env.PRIVATE_KEY as string]
     }
   },
   etherscan: {
