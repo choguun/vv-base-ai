@@ -2,7 +2,7 @@ import { formatEther, parseEther } from "viem";
 import hre from "hardhat";
 
 async function maincross() {
-  const owner = "0x1a46582A48a04c67D78e062E0631cDDE9fD2DF0a";
+  const owner = "0xA812D8dA36aAC49AE943cD287e24421B18fD13D3";
 
   const world = await hre.ethers.deployContract("World", [owner]);
   await world.waitForDeployment();

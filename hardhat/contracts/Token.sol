@@ -8,6 +8,7 @@ import {Profile} from "./Profile.sol";
 contract Token is ERC20, Ownable {
     address public profile;
     address public world;
+    uint256 public convertRate = 1000;
 
     constructor(address _initialOwner, address _world, address _profile) ERC20("CUBE Token", "CUBE") Ownable(_initialOwner) {
         profile = _profile;
@@ -34,5 +35,10 @@ contract Token is ERC20, Ownable {
 
     function burn(address from, uint256 _amount) public onlyWorld {
         _burn(from, _amount);
+    }
+
+    function mintbyExchange(address to, uint256 _amount) public onlyUser payable {
+        require(msg.value == _amount / convertRate, "Invalid amount");
+        _mint(to, _amount);
     }
 }

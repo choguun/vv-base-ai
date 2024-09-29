@@ -1,7 +1,7 @@
 
 async function maincross5() {
     const Contract = await ethers.getContractFactory("World");
-    const deployedContract = await Contract.attach('0x465D5fc7bd74f73B8Ea0e5bD716522983eDCD44A');
+    const deployedContract = await Contract.attach('0x10c57A3eF49E2Bf7A96E541b0fFEf7aDA8579A40');
   
     const tx1 = await deployedContract.createItem(0, "PICKAXE", "PICKAXE", 100);
     const receipt1 = await tx1.wait();
