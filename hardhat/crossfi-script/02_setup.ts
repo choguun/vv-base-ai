@@ -31,7 +31,7 @@ async function maincross2() {
 
   console.log('Transaction receipt3: ', receipt3);
 
-  const tx4 = await deployedContract.setItem(potion);
+  const tx4 = await deployedContract.setPotion(potion);
   const receipt4 = await tx4.wait();
 
   console.log('Transaction receipt4: ', receipt4);
