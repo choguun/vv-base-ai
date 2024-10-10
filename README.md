@@ -14,17 +14,6 @@
 Demo:
 https://crossfi.voxelverses.xyz
 
-#### Deploy KiiChain
-* cd hardhat
-* npx hardhat run kii-script/01_deploy.ts --network kiiTestnet
-* config contract address to all deploy scripts.
-* npx hardhat run kii-script/02_setup.ts --network kiiTestnet
-* npx hardhat run kii-script/03_quest.ts --network kiiTestnet
-* npx hardhat run kii-script/04_recipe.ts --network kiiTestnet
-* npx hardhat run kii-script/05_item.ts --network kiiTestnet
-
-Demo:
-https://kii.voxelverses.xyz
 
 #### Deploy Base
 * cd hardhat
