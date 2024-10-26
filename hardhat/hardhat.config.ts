@@ -35,6 +35,10 @@ const config: HardhatUserConfig = {
     crossfiTestnet: {
       url: "https://testnet-crossfi-evm.konsortech.xyz",
       accounts: [process.env.PRIVATE_KEY as string]
+    },
+    oasisSapphireTestnet: {
+      url: "https://testnet.sapphire.oasis.io",
+      accounts: [process.env.PRIVATE_KEY as string]
     }
   },
   etherscan: {
