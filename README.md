@@ -2,30 +2,17 @@
 
 ### How to deploy vv-base-ai
 
-#### Deploy Crossfi
+#### Deploy Aurora
 * cd hardhat
-* npx hardhat run crossfi-script/01_deploy.ts --network crossfiTestnet
+* npx hardhat run aurora-script/01_deploy.ts --network auroraTestnet
 * config contract address to all deploy scripts.
-* npx hardhat run crossfi-script/02_setup.ts --network crossfiTestnet
-* npx hardhat run crossfi-script/03_quest.ts --network crossfiTestnet
-* npx hardhat run crossfi-script/04_recipe.ts --network crossfiTestnet
-* npx hardhat run crossfi-script/05_item.ts --network crossfiTestnet
+* npx hardhat run aurora-script/02_setup.ts --network auroraTestnet
+* npx hardhat run aurora-script/03_quest.ts --network auroraTestnet
+* npx hardhat run aurora-script/04_recipe.ts --network auroraTestnet
+* npx hardhat run aurora-script/05_item.ts --network auroraTestnet
 
 Demo:
-https://crossfi.voxelverses.xyz
-
-
-#### Deploy Base
-* cd hardhat
-* npx hardhat run scripts/01_deploy_protocol.ts --network baseSepolia
-* config contract address to all deploy scripts.
-* npx hardhat run scripts/02_setup_world.ts --network basebaseSepolia 
-* npx hardhat run scripts/03_add_quest.ts --network basebaseSepolia
-* npx hardhat run scripts/04_add_recipe.ts --network basebaseSepolia
-* npx hardhat run scripts/05_add_gameitem.ts --network basebaseSepolia
-
-Demo:
-https://base.voxelverses.xyz
+https://aurora.voxelverses.xyz
 
 #### How to run AI Agent
 * cd ai-agent
