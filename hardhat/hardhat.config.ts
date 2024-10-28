@@ -39,6 +39,10 @@ const config: HardhatUserConfig = {
     oasisSapphireTestnet: {
       url: "https://testnet.sapphire.oasis.io",
       accounts: [process.env.PRIVATE_KEY as string]
+    },
+    auroraTestnet: {
+      url: "https://testnet.aurora.dev",
+      accounts: [process.env.PRIVATE_KEY as string]
     }
   },
   etherscan: {
