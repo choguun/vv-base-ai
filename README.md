@@ -2,17 +2,17 @@
 
 ### How to deploy vv-base-ai
 
-#### Deploy Aurora
+#### Deploy Sapphire
 * cd hardhat
-* npx hardhat run aurora-script/01_deploy.ts --network auroraTestnet
+* npx hardhat run sapphire-script/01_deploy.ts --network oasisSapphireTestnet
 * config contract address to all deploy scripts.
-* npx hardhat run aurora-script/02_setup.ts --network auroraTestnet
-* npx hardhat run aurora-script/03_quest.ts --network auroraTestnet
-* npx hardhat run aurora-script/04_recipe.ts --network auroraTestnet
-* npx hardhat run aurora-script/05_item.ts --network auroraTestnet
+* npx hardhat run sapphire-script/02_setup.ts --network oasisSapphireTestnet
+* npx hardhat run sapphire-script/03_quest.ts --network oasisSapphireTestnet
+* npx hardhat run sapphire-script/04_recipe.ts --network oasisSapphireTestnet
+* npx hardhat run sapphire-script/05_item.ts --network oasisSapphireTestnet
 
 Demo:
-https://aurora.voxelverses.xyz
+https://vv-base-app-oasis.vercel.app
 
 #### How to run AI Agent
 * cd ai-agent
