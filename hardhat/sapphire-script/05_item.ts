@@ -1,7 +1,7 @@
 
 async function mainsapp5() {
     const Contract = await ethers.getContractFactory("World");
-    const deployedContract = await Contract.attach('0x10c57A3eF49E2Bf7A96E541b0fFEf7aDA8579A40');
+    const deployedContract = await Contract.attach('0xcba9eFfAdD8934aA769C633DFe7B98D9c2C887be');
   
     const tx1 = await deployedContract.createItem(0, "PICKAXE", "PICKAXE", 100);
     const receipt1 = await tx1.wait();

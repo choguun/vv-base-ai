@@ -1,6 +1,7 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox-viem";
 import "@nomicfoundation/hardhat-ethers";
+import '@oasisprotocol/sapphire-hardhat';
 require('dotenv').config()
 
 const config: HardhatUserConfig = {
@@ -20,16 +21,8 @@ const config: HardhatUserConfig = {
       url: `https://sepolia.base.org`,
       accounts: [process.env.PRIVATE_KEY as string]
     },
-    immutableZkevmTestnet: {
-      url: "https://rpc.testnet.immutable.com",
-      accounts: [process.env.PRIVATE_KEY as string]
-    },
     b2Mainnet: {
       url: "https://rpc.bsquared.network",
-      accounts: [process.env.PRIVATE_KEY as string]
-    },
-    kiiTestnet: {
-      url: "https://a.sentry.testnet.kiivalidator.com:8645",
       accounts: [process.env.PRIVATE_KEY as string]
     },
     crossfiTestnet: {
@@ -38,12 +31,9 @@ const config: HardhatUserConfig = {
     },
     oasisSapphireTestnet: {
       url: "https://testnet.sapphire.oasis.io",
-      accounts: [process.env.PRIVATE_KEY as string]
+      accounts: [process.env.PRIVATE_KEY as string],
+      chainId: 0x5aff,
     },
-    auroraTestnet: {
-      url: "https://testnet.aurora.dev",
-      accounts: [process.env.PRIVATE_KEY as string]
-    }
   },
   etherscan: {
   },

@@ -1,14 +1,14 @@
 async function mainsapp2() { 
-  const world = "0x10c57A3eF49E2Bf7A96E541b0fFEf7aDA8579A40";
+  const world = "0xcba9eFfAdD8934aA769C633DFe7B98D9c2C887be";
   const WorldContract = await ethers.getContractFactory("World");
   const deployedContract = await WorldContract.attach(world);
   
-  const item = "0x1e27D4E0Eb0dddF403FaE76fde2DbAf6Da25C4A6";
-  const potion = "0xebA233A625f9B401a43763A2b5F1294371E569f4";
-  const token = "0xa7331aaebf89DC1C8a6F5a4bd60F6fB45bE1832c";
-  const profile = "0xd89203438e7fB77B8e1fae4eB3098E1c6A5D5b0e";
-  const craft = "0x4475537870a035f0786D5d0b82dc72D497D9f671";
-  const vault = "0xC63Ad50041cc370D220004Dae696674Da2814f8e";
+  const item = "0xd06b5a486f7239AE03a0af3e38E2041c932B0920";
+  const potion = "0xB98f0281b9B220eA3e44c83c69672264FEbb0e17";
+  const token = "0xeAaDA7D04CBC145224b6D75d3362fA8015298898";
+  const profile = "0xe2e63Cfd26459C8B1ca11271eE6AB7Cf03eC4271";
+  const craft = "0xb35c508208EAf6E683d0d5B58B1aC11602B46B45";
+  const vault = "0x255B4Ae1617A06B9693894755dB15f6c890b4103";
 
   const TokenContract = await ethers.getContractFactory("Token");
   const tokenContract = await TokenContract.attach(token);
