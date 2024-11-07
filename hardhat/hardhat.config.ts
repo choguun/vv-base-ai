@@ -34,6 +34,10 @@ const config: HardhatUserConfig = {
       accounts: [process.env.PRIVATE_KEY as string],
       chainId: 0x5aff,
     },
+    xrplTestnet: {
+      url: "https://rpc-evm-sidechain.xrpl.org",
+      accounts: [process.env.PRIVATE_KEY as string],
+    },
   },
   etherscan: {
   },
