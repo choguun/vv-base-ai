@@ -29,15 +29,14 @@ const config: HardhatUserConfig = {
       url: "https://testnet-crossfi-evm.konsortech.xyz",
       accounts: [process.env.PRIVATE_KEY as string]
     },
-    oasisSapphireTestnet: {
-      url: "https://testnet.sapphire.oasis.io",
-      accounts: [process.env.PRIVATE_KEY as string],
-      chainId: 0x5aff,
-    },
     xrplTestnet: {
       url: "https://rpc-evm-sidechain.xrpl.org",
       accounts: [process.env.PRIVATE_KEY as string],
     },
+    taikoTestnet: {
+      url: "https://rpc.hekla.taiko.xyz",
+      accounts: [process.env.PRIVATE_KEY as string]
+    }
   },
   etherscan: {
   },

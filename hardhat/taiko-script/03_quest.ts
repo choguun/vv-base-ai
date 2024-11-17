@@ -1,7 +1,7 @@
 
-async function mainsapp3() {
+async function maintaiko3() {
     const Contract = await ethers.getContractFactory("World");
-    const deployedContract = await Contract.attach('0xcba9eFfAdD8934aA769C633DFe7B98D9c2C887be');
+    const deployedContract = await Contract.attach('0x10c57A3eF49E2Bf7A96E541b0fFEf7aDA8579A40');
   
     // createQuest(string memory _name, string memory _description, uint256 _reward, QuestType _questType)
     // 1. daily check in 
@@ -25,7 +25,7 @@ async function mainsapp3() {
     console.log('======================== DONE ========================');
   }
   
-  mainsapp3()
+  maintaiko3()
     .then(() => process.exit(0))
     .catch((error) => {
       console.error(error);

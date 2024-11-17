@@ -1,7 +1,7 @@
 import { formatEther, parseEther } from "viem";
 import hre from "hardhat";
 
-async function mainsapp() {
+async function maintaiko() {
   const owner = "0xA812D8dA36aAC49AE943cD287e24421B18fD13D3";
 
   const world = await hre.ethers.deployContract("World", [owner]);
@@ -25,6 +25,7 @@ async function mainsapp() {
   const vault = await hre.ethers.deployContract("ERC4626Vault", [token.target]);
   await vault.waitForDeployment();
 
+//   await token.setWorld([world.target]);
   
   console.log(
     `item address: ${item.target}`
@@ -51,7 +52,7 @@ async function mainsapp() {
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
-mainsapp().catch((error) => {
+maintaiko().catch((error) => {
   console.error(error);
   process.exitCode = 1;
 });

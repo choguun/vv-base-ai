@@ -1,7 +1,7 @@
 
-async function mainsapp4() {
+async function maintaiko4() {
     const Contract = await ethers.getContractFactory("World");
-    const deployedContract = await Contract.attach('0xcba9eFfAdD8934aA769C633DFe7B98D9c2C887be');
+    const deployedContract = await Contract.attach('0x10c57A3eF49E2Bf7A96E541b0fFEf7aDA8579A40');
   
     // addItem
     const tx4 = await deployedContract.addItems(0, 0);
@@ -32,7 +32,7 @@ async function mainsapp4() {
     console.log('======================== DONE ========================');
   }
   
-  mainsapp4()
+  maintaiko4()
     .then(() => process.exit(0))
     .catch((error) => {
       console.error(error);

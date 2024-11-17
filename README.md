@@ -2,17 +2,17 @@
 
 ### How to deploy vv-base-ai
 
-#### Deploy Sapphire
+#### Deploy Taiko (Hekla)
 * cd hardhat
-* npx hardhat run sapphire-script/01_deploy.ts --network oasisSapphireTestnet
+* npx hardhat run taiko-script/01_deploy.ts --network taikoTestnet
 * config contract address to all deploy scripts.
-* npx hardhat run sapphire-script/02_setup.ts --network oasisSapphireTestnet
-* npx hardhat run sapphire-script/03_quest.ts --network oasisSapphireTestnet
-* npx hardhat run sapphire-script/04_recipe.ts --network oasisSapphireTestnet
-* npx hardhat run sapphire-script/05_item.ts --network oasisSapphireTestnet
+* npx hardhat run taiko-script/02_setup.ts --network taikoTestnet
+* npx hardhat run taiko-script/03_quest.ts --network taikoTestnet
+* npx hardhat run taiko-script/04_recipe.ts --network taikoTestnet
+* npx hardhat run taiko-script/05_item.ts --network taikoTestnet
 
 Demo:
-https://vv-base-app-oasis.vercel.app
+
 
 #### How to run AI Agent
 * cd ai-agent
