@@ -36,6 +36,10 @@ const config: HardhatUserConfig = {
     taikoTestnet: {
       url: "https://rpc.hekla.taiko.xyz",
       accounts: [process.env.PRIVATE_KEY as string]
+    },
+    zytronTestnet: {
+      url: "https://linea-testnet-zytron.zypher.game",
+      accounts: [process.env.PRIVATE_KEY as string]
     }
   },
   etherscan: {
